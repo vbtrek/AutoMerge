@@ -478,7 +478,8 @@ namespace AutoMerge
 
         private static bool IsTargetPath(ItemIdentifier mergeRelations, ItemIdentifier branch)
         {
-            return mergeRelations.Item.Contains(branch.Item + "/");
+            //return mergeRelations.Item.Contains(branch.Item + "/");
+            return mergeRelations.Item.StartsWith(branch.Item);
         }
 
         private static string CalculateTopFolder(IList<Change> changes)
