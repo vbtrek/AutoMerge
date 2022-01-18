@@ -61,7 +61,7 @@ namespace AutoMerge {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Auto Merge.
+        ///   Looks up a localized string similar to Intact Auto Merge.
         /// </summary>
         internal static string AutoMergePageName {
             get {
