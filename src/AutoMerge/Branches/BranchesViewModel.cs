@@ -406,7 +406,11 @@ namespace AutoMerge
             {
                 FromOriginalToSourceBranches = new List<string>(),
             };
-            var trackMerges = allTrackMerges.Where(m => m.TargetItem.Item == sourcePath).ToArray();
+
+            // INTACT Tweak based on ihcaesar:branch_not_found PR
+            var trackMerges = allTrackMerges.Where(m => string.Equals(m.TargetItem.Item, sourcePath, StringComparison.OrdinalIgnoreCase)).ToArray();
+            //var trackMerges = allTrackMerges.Where(m => m.TargetItem.Item == sourcePath).ToArray();
+
             if (!trackMerges.IsNullOrEmpty())
             {
                 var changesetIds = trackMerges.Select(t => t.SourceChangeset.ChangesetId).ToArray();
@@ -478,8 +482,13 @@ namespace AutoMerge
 
         private static bool IsTargetPath(ItemIdentifier mergeRelations, ItemIdentifier branch)
         {
-            //return mergeRelations.Item.Contains(branch.Item + "/");
-            return mergeRelations.Item.StartsWith(branch.Item);
+            // INTACT Tweak based on ihcaesar:branch_not_found PR
+            return mergeRelations.Item.IndexOf(branch.Item + '/', StringComparison.OrdinalIgnoreCase) >= 0 ||
+               string.Compare(mergeRelations.Item, branch.Item, StringComparison.OrdinalIgnoreCase) == 0;
+
+            // INTACT Tweak to improve hit rates
+            //return mergeRelations.Item.Contains(branch.Item + "/"); // ORIGINAL
+            //return mergeRelations.Item.StartsWith(branch.Item); // INTACT
         }
 
         private static string CalculateTopFolder(IList<Change> changes)
@@ -524,7 +533,9 @@ namespace AutoMerge
 
         private static string FindShareFolder(string topFolder, string changeFolder)
         {
-            if ((topFolder == null) || topFolder.Contains(changeFolder))
+            // INTACT Tweak based on ihcaesar:branch_not_found PR
+            //if ((topFolder == null) || topFolder.Contains(changeFolder))
+            if ((topFolder == null) || topFolder.IndexOf(changeFolder, StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 return changeFolder;
             }
@@ -884,12 +895,16 @@ namespace AutoMerge
                     {
                         foreach (var shareFolderRelationship in shareFolderRelationships.Where(r => !r.IsDeleted))
                         {
+                            // INTACT Tweak based on ihcaesar:branch_not_found PR
                             var targetBranch =
-                                targetBranches.FirstOrDefault(branch => shareFolderRelationship.Item.Contains(branch));
+                                //targetBranches.FirstOrDefault(branch => shareFolderRelationship.Item.Contains(branch));
+                                targetBranches.FirstOrDefault(branch => shareFolderRelationship.Item.IndexOf(branch, StringComparison.OrdinalIgnoreCase) >= 0);
                             if (targetBranch != null)
                             {
+                                // INTACT Tweak based on ihcaesar:branch_not_found PR
                                 var sourceRelationship = sourceRelationships
-                                    .FirstOrDefault(r => r.Item.Contains(targetBranch));
+                                    //.FirstOrDefault(r => r.Item.Contains(targetBranch));
+                                    .FirstOrDefault(r => r.Item.IndexOf(targetBranch, StringComparison.OrdinalIgnoreCase) >= 0);
                                 mergeRelationships.Add(new MergeRelation
                                 {
                                     Item = pendingChange.ServerItem,
@@ -998,9 +1013,11 @@ namespace AutoMerge
             var hasConflicts = false;
             foreach (var change in changes)
             {
+                // INTACT Tweak based on ihcaesar:branch_not_found PR
                 var mergeRelation =
                     mergeRelationships.FirstOrDefault(
-                        r => r.Item == change.Item.ServerItem && r.Target.StartsWith(targetBranch));
+                        //r => r.Item == change.Item.ServerItem && r.Target.StartsWith(targetBranch));
+                        r => r.Item == change.Item.ServerItem && r.Target.StartsWith(targetBranch, StringComparison.OrdinalIgnoreCase));
                 if (mergeRelation != null)
                 {
                     var recursionType = CalculateRecursionType(mergeRelation);
@@ -1076,9 +1093,13 @@ namespace AutoMerge
         private static List<PendingChange> GetPendingChanges(string target, Workspace workspace)
         {
             var allPendingChanges = workspace.GetPendingChangesEnumerable(target, RecursionType.Full);
+
+            // INTACT Tweak based on ihcaesar:branch_not_found PR
             var targetPendingChanges = allPendingChanges
-                .Where(p => p.IsMerge && p.ServerItem.Contains(target))
+                //.Where(p => p.IsMerge && p.ServerItem.Contains(target))
+                .Where(p => p.IsMerge && p.ServerItem.IndexOf(target, StringComparison.OrdinalIgnoreCase) >= 0)
                 .ToList();
+
             return targetPendingChanges;
         }
 
@@ -1087,7 +1108,9 @@ namespace AutoMerge
             var itemSpecs = new List<ItemSpec>();
             foreach (var mergeRelationship in mergeRelationships)
             {
-                if (mergeRelationship.Target.StartsWith(targetBranch))
+                // INTACT Tweak based on ihcaesar:branch_not_found PR
+                //if (mergeRelationship.Target.StartsWith(targetBranch))
+                if (mergeRelationship.Target.StartsWith(targetBranch, StringComparison.OrdinalIgnoreCase))
                 {
                     var recursionType = CalculateRecursionType(mergeRelationship);
                     itemSpecs.Add(new ItemSpec(mergeRelationship.Target, recursionType));
@@ -1111,7 +1134,9 @@ namespace AutoMerge
             var getLatestFiles = new List<string>();
             foreach (var mergeRelationship in mergeRelationships.Where(r => r.TargetItemType == ItemType.File && r.GetLatesPath != null))
             {
-                if (mergeRelationship.GetLatesPath.StartsWith(targetPath))
+                // INTACT Tweak based on ihcaesar:branch_not_found PR
+                if (mergeRelationship.GetLatesPath.StartsWith(targetPath, StringComparison.OrdinalIgnoreCase))
+                //if (mergeRelationship.GetLatesPath.StartsWith(targetPath))
                     getLatestFiles.Add(mergeRelationship.GetLatesPath);
             }
 
