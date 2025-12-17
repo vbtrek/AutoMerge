@@ -220,6 +220,12 @@
     <Content Include="Resources\preview.png">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="source.vs15.0.extension.vsixmanifest" />
+    <Content Include="source.vs16.0.extension.vsixmanifest" />
+    <Content Include="source.vs17.0.extension.vsixmanifest" />
+    <None Include="source.vs18.0.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest">
