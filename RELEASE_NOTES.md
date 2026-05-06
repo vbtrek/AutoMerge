@@ -1,3 +1,6 @@
+#### 0.2.6.14 (2026-05-06)
+* (enhancement) Add Visual Studio 2026 (v18.0) support
+
 #### 0.2.6.10 (2021-03-19)
 * (fix) When you have multiple branches with same prefix, e.g. ABC and ABCDE. When merging to ABC method choses ABCDE instead, and as a result there are multiple branches with the same name in target branch selector
 
