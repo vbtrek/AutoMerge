@@ -14,6 +14,12 @@ namespace AutoMerge
       _maxChangesetCount = maxChangesetCount;
     }
 
+    public MyChangesetChangesetProvider(ChangesetService changesetService, string teamProjectName, int maxChangesetCount)
+      : base(changesetService, teamProjectName)
+    {
+      _maxChangesetCount = maxChangesetCount;
+    }
+
     protected override List<ChangesetViewModel> GetChangesetsInternal(string userLogin)
     {
       var changesets = new List<ChangesetViewModel>();

@@ -1,28 +1,28 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AutoMerge.Standalone.Properties;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.VersionControl.Client;
-using Microsoft.VisualStudio.Shell;
 
 namespace AutoMerge.Standalone
 {
   public partial class AutoMergeControl : UserControl
   {
+    private const string DefaultTeamProjectName = "Intact iQ";
+
     private StandaloneServiceProvider _serviceProvider;
     private TfsTeamProjectCollection _tfs;
     private VersionControlServer _versionControl;
-    private List<ChangesetInfo> _changesets;
+    private global::AutoMerge.ChangesetService _changesetService;
+    private List<global::AutoMerge.ChangesetViewModel> _changesets;
     private int _selectedChangesetId;
 
     public AutoMergeControl()
     {
       InitializeComponent();
-      _changesets = new List<ChangesetInfo>();
+      _changesets = new List<global::AutoMerge.ChangesetViewModel>();
     }
 
     public void Initialize(StandaloneServiceProvider serviceProvider)
@@ -30,6 +30,7 @@ namespace AutoMerge.Standalone
       _serviceProvider = serviceProvider;
       _tfs = serviceProvider.TfsConnection;
       _versionControl = _tfs.GetService<VersionControlServer>();
+      _changesetService = new global::AutoMerge.ChangesetService(_versionControl);
 
       InitializeAsync();
     }
@@ -51,37 +52,12 @@ namespace AutoMerge.Standalone
 
     private async Task LoadRecentChangesetsAsync()
     {
-      // TODO_DS1 Might want to create a MyChangesetChangesetProvider to do this
-      //          We might also want to make the projectName variable "Intact iQ" below
-      await Task.Run(() =>
-      {
-        var userName = _versionControl.AuthorizedUser;
+      var changesetProvider = new global::AutoMerge.MyChangesetChangesetProvider(
+          _changesetService,
+          DefaultTeamProjectName,
+          global::AutoMerge.Settings.Instance.ChangesetCount);
 
-        var queryHistory = _versionControl.QueryHistory(
-                  "$/Intact iQ",
-                  VersionSpec.Latest,
-                  0,
-                  RecursionType.Full,
-                  userName,
-                  null,
-                  null,
-                  20,
-                  false,
-                  false);
-
-        _changesets.Clear();
-
-        foreach (Changeset cs in queryHistory)
-        {
-          _changesets.Add(new ChangesetInfo
-          {
-            ChangesetId = cs.ChangesetId,
-            Comment = cs.Comment,
-            Owner = cs.Owner,
-            CreationDate = cs.CreationDate
-          });
-        }
-      });
+      _changesets = await changesetProvider.GetChangesets(_versionControl.AuthorizedUser);
 
       UpdateChangesetsView();
     }
@@ -96,7 +72,7 @@ namespace AutoMerge.Standalone
 
         item.SubItems.Add("");
 
-        item.SubItems.Add(TruncateComment(changeset.Comment));
+        item.SubItems.Add(TruncateComment(changeset.Comment) + (string.IsNullOrWhiteSpace(changeset.DisplayBranchName) ? string.Empty : $" [{changeset.DisplayBranchName}]"));
 
         item.Tag = changeset;
 
@@ -115,11 +91,20 @@ namespace AutoMerge.Standalone
 
       lblStatus.Text = $"Loading branches for changeset {_selectedChangesetId}...";
 
-      // This is a placeholder - in a full implementation, you would:
-      // 1. Get the changeset
-      // 2. Find associated branches
-      // 3. Query merge relationships
-      // 4. Display the branches
+      var selectedChangeset = lstChangesets.SelectedItems.Count > 0
+          ? lstChangesets.SelectedItems[0].Tag as global::AutoMerge.ChangesetViewModel
+          : null;
+
+      if (selectedChangeset != null && selectedChangeset.Branches != null)
+      {
+        foreach (var branch in selectedChangeset.Branches)
+        {
+          var item = new ListViewItem(branch) { Checked = true };
+          lstBranches.Items.Add(item);
+        }
+      }
+
+      UpdateMergeButton();
 
       lblStatus.Text = "Ready";
     }
@@ -137,7 +122,7 @@ namespace AutoMerge.Standalone
     {
       if (lstChangesets.SelectedItems.Count > 0)
       {
-        var changeset = lstChangesets.SelectedItems[0].Tag as ChangesetInfo;
+        var changeset = lstChangesets.SelectedItems[0].Tag as global::AutoMerge.ChangesetViewModel;
 
         if (changeset != null)
         {
@@ -205,22 +190,17 @@ namespace AutoMerge.Standalone
       {
         lblStatus.Text = $"Loading changeset {changesetId}...";
 
-        await Task.Run(() =>
+        var changesetProvider = new global::AutoMerge.ChangesetByIdChangesetProvider(_changesetService, new[] { changesetId });
+        var changesets = await changesetProvider.GetChangesets(null);
+        if (changesets.Count > 0)
         {
-          var changeset = _versionControl.GetChangeset(changesetId);
-          _changesets.Add(new ChangesetInfo
-          {
-            ChangesetId = changeset.ChangesetId,
-            Comment = changeset.Comment,
-            Owner = changeset.Owner,
-            CreationDate = changeset.CreationDate
-          });
-        });
+          _changesets.Add(changesets[0]);
+        }
 
         UpdateChangesetsView();
 
         var items = lstChangesets.Items.Cast<ListViewItem>()
-            .Where(i => ((ChangesetInfo)i.Tag).ChangesetId == changesetId).ToArray();
+            .Where(i => ((global::AutoMerge.ChangesetViewModel)i.Tag).ChangesetId == changesetId).ToArray();
         if (items.Length > 0)
         {
           items[0].Selected = true;
@@ -236,12 +216,5 @@ namespace AutoMerge.Standalone
       }
     }
 
-    private class ChangesetInfo
-    {
-      public int ChangesetId { get; set; }
-      public string Comment { get; set; }
-      public string Owner { get; set; }
-      public DateTime CreationDate { get; set; }
-    }
   }
 }

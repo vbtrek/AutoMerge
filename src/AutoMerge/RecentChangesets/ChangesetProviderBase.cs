@@ -10,11 +10,20 @@ namespace AutoMerge
   {
     private readonly IServiceProvider _serviceProvider;
     private readonly Lazy<ChangesetService> _changesetService;
+    private readonly ChangesetService _overriddenChangesetService;
+    private readonly string _projectName;
 
     protected ChangesetProviderBase(IServiceProvider serviceProvider)
     {
       _serviceProvider = serviceProvider;
       _changesetService = new Lazy<ChangesetService>(InitChangesetService);
+    }
+
+    protected ChangesetProviderBase(ChangesetService changesetService, string projectName)
+    {
+      _overriddenChangesetService = changesetService;
+      _projectName = projectName;
+      _changesetService = new Lazy<ChangesetService>(() => changesetService);
     }
 
     public Task<List<ChangesetViewModel>> GetChangesets(string userLogin)
@@ -40,6 +49,11 @@ namespace AutoMerge
 
     protected ChangesetService GetChangesetService()
     {
+      if (_overriddenChangesetService != null)
+      {
+        return _overriddenChangesetService;
+      }
+
       return _changesetService.Value;
     }
 
@@ -62,6 +76,11 @@ namespace AutoMerge
 
     protected string GetProjectName()
     {
+      if (!string.IsNullOrWhiteSpace(_projectName))
+      {
+        return _projectName;
+      }
+
       var context = VersionControlNavigationHelper.GetTeamFoundationContext(_serviceProvider);
 
       if (context != null)

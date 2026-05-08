@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace AutoMerge
 {
-  internal class Settings
+  public class Settings
   {
     private readonly ISettingProvider _settingProvider;
     private static readonly Lazy<Settings> _instance;
