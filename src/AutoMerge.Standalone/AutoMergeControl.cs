@@ -35,7 +35,7 @@ namespace AutoMerge.Standalone
       InitializeAsync();
     }
 
-    private async void InitializeAsync()
+    private async Task InitializeAsync()
     {
       try
       {
