@@ -85,7 +85,7 @@ namespace AutoMerge.Standalone
       }
     }
 
-    private async void UpdateBranchesView()
+    private async Task UpdateBranchesViewAsync()
     {
       try
       {
@@ -160,7 +160,7 @@ namespace AutoMerge.Standalone
       return firstLine.Length > 80 ? firstLine.Substring(0, 77) + "..." : firstLine;
     }
 
-    private void lstChangesets_SelectedIndexChanged(object sender, EventArgs e)
+    private async void lstChangesets_SelectedIndexChanged(object sender, EventArgs e)
     {
       if (lstChangesets.SelectedItems.Count > 0)
       {
@@ -170,7 +170,7 @@ namespace AutoMerge.Standalone
         {
           _selectedChangesetId = changeset.ChangesetId;
 
-          UpdateBranchesView();
+          await UpdateBranchesViewAsync();
         }
       }
     }
