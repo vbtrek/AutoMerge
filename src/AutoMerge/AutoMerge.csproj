@@ -1,6 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
+    <!-- Enable VSIX container creation -->
+    <VSSDKBuildToolsAutoSetup>true</VSSDKBuildToolsAutoSetup>
+    <DeployExtension>True</DeployExtension>
+    <CreateVsixContainer>True</CreateVsixContainer>
+    <CopyVsixExtensionFiles>True</CopyVsixExtensionFiles>
+    <CopyVsixExtensionLocation>$(OutDir)</CopyVsixExtensionLocation>
     <MinimumVisualStudioVersion>$(VisualStudioVersion)</MinimumVisualStudioVersion>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
     <StartAction>Program</StartAction>
@@ -60,27 +66,39 @@
     <Reference Include="WindowsBase" />
     <Reference Include="Microsoft.TeamFoundation.Client">
       <HintPath>..\..\lib\$(VisualStudioVersion)\Microsoft.TeamFoundation.Client.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Common">
       <HintPath>..\..\lib\$(VisualStudioVersion)\Microsoft.TeamFoundation.Common.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.Controls">
       <HintPath>..\..\lib\$(VisualStudioVersion)\Microsoft.TeamFoundation.Controls.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.VersionControl.Client">
       <HintPath>..\..\lib\$(VisualStudioVersion)\Microsoft.TeamFoundation.VersionControl.Client.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.VersionControl.Common">
       <HintPath>..\..\lib\$(VisualStudioVersion)\Microsoft.TeamFoundation.VersionControl.Common.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client">
       <HintPath>..\..\lib\$(VisualStudioVersion)\Microsoft.TeamFoundation.WorkItemTracking.Client.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Services.Common">
+      <HintPath>..\..\lib\$(VisualStudioVersion)\Microsoft.VisualStudio.Services.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Services.WebApi">
+      <HintPath>..\..\lib\$(VisualStudioVersion)\Microsoft.VisualStudio.Services.WebApi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\lib\$(VisualStudioVersion)\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -89,15 +107,14 @@
   <!-- Default case: use the VisualStudioVersion variable -->
   <ItemGroup Condition="'$(VisualStudioVersion)' != '18.0'">
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="$(VisualStudioVersion).*" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="$(VisualStudioVersion).*" ExcludeAssets="runtime" />
   </ItemGroup>
   <!-- Special case: VS2026 (VisualStudioVersion = 18.0) -->
   <ItemGroup Condition="'$(VisualStudioVersion)' == '18.0'">
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.*" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.*" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.*" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.*" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0" Version="17.*" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.Framework" Version="17.*" PrivateAssets="All" />
-</ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMergeNavigationItem.cs" />
     <Compile Include="AutoMergePage.cs" />
@@ -197,7 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>

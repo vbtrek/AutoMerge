@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.TeamFoundation.VersionControl.Client;
 
@@ -16,6 +16,7 @@ namespace AutoMerge
 		public ICollection<Changeset> GetUserChangesets(string teamProjectName, string userName, int count)
 		{
 			var path = "$/" + teamProjectName;
+
 			return _versionControlServer.QueryHistory(path,
 				VersionSpec.Latest,
 				0,

@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11723.231
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMerge", "AutoMerge\AutoMerge.csproj", "{726ED85E-2274-4D95-B822-B2CFE2CE44B9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMerge.Tests", "AutoMerge.Tests\AutoMerge.Tests.csproj", "{4CD4D5BB-FE08-4DAF-A952-93E78022FC12}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -44,9 +42,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "18.0", "18.0", "{2286A832-B
 		..\lib\18.0\Microsoft.TeamFoundation.Client.dll = ..\lib\18.0\Microsoft.TeamFoundation.Client.dll
 		..\lib\18.0\Microsoft.TeamFoundation.Common.dll = ..\lib\18.0\Microsoft.TeamFoundation.Common.dll
 		..\lib\18.0\Microsoft.TeamFoundation.Controls.dll = ..\lib\18.0\Microsoft.TeamFoundation.Controls.dll
+		..\lib\18.0\Microsoft.TeamFoundation.Core.WebApi.dll = ..\lib\18.0\Microsoft.TeamFoundation.Core.WebApi.dll
 		..\lib\18.0\Microsoft.TeamFoundation.VersionControl.Client.dll = ..\lib\18.0\Microsoft.TeamFoundation.VersionControl.Client.dll
 		..\lib\18.0\Microsoft.TeamFoundation.VersionControl.Common.dll = ..\lib\18.0\Microsoft.TeamFoundation.VersionControl.Common.dll
 		..\lib\18.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll = ..\lib\18.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll
+		..\lib\18.0\Microsoft.VisualStudio.Services.Client.Interactive.dll = ..\lib\18.0\Microsoft.VisualStudio.Services.Client.Interactive.dll
+		..\lib\18.0\Microsoft.VisualStudio.Services.Common.dll = ..\lib\18.0\Microsoft.VisualStudio.Services.Common.dll
+		..\lib\18.0\Microsoft.VisualStudio.Services.WebApi.dll = ..\lib\18.0\Microsoft.VisualStudio.Services.WebApi.dll
+		..\lib\18.0\Newtonsoft.Json.dll = ..\lib\18.0\Newtonsoft.Json.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FE189FF-6AED-444C-B5DE-9F841281B0F9}"
@@ -80,6 +83,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{96B4F09B
 		..\tools\NuGet\NuGet.exe = ..\tools\NuGet\NuGet.exe
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMerge.Standalone", "AutoMerge.Standalone\AutoMerge.Standalone.csproj", "{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,8 +95,10 @@ Global
 		{726ED85E-2274-4D95-B822-B2CFE2CE44B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{726ED85E-2274-4D95-B822-B2CFE2CE44B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{726ED85E-2274-4D95-B822-B2CFE2CE44B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4CD4D5BB-FE08-4DAF-A952-93E78022FC12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4CD4D5BB-FE08-4DAF-A952-93E78022FC12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
