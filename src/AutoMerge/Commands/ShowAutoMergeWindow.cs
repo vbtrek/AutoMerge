@@ -1,7 +1,8 @@
+using System;
 using System.ComponentModel.Design;
-using Microsoft.TeamFoundation.Common.Internal;
 using Microsoft.TeamFoundation.Controls;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.TeamFoundation.Controls.WPF.TeamExplorer;
 using Task = System.Threading.Tasks.Task;
 
 namespace AutoMerge.Commands
@@ -24,8 +25,12 @@ namespace AutoMerge.Commands
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var teamExplorer = package.GetService<ITeamExplorer>();
-            teamExplorer.NavigateToPage(GuidList.AutoMergePageGuid, null);
+            // Navigate to the AutoMerge page in Team Explorer
+            var serviceProvider = package as IServiceProvider;
+            if (serviceProvider != null)
+            {
+                TeamExplorerUtils.Instance.NavigateToPage(GuidList.AutoMergePageGuid.ToString(), serviceProvider, null);
+            }
         }
     }
 }
