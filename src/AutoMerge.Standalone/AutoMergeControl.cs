@@ -85,28 +85,70 @@ namespace AutoMerge.Standalone
       }
     }
 
-    private void UpdateBranchesView()
+    private async void UpdateBranchesView()
     {
-      lstBranches.Items.Clear();
-
-      lblStatus.Text = $"Loading branches for changeset {_selectedChangesetId}...";
-
-      var selectedChangeset = lstChangesets.SelectedItems.Count > 0
-          ? lstChangesets.SelectedItems[0].Tag as global::AutoMerge.ChangesetViewModel
-          : null;
-
-      if (selectedChangeset != null && selectedChangeset.Branches != null)
+      try
       {
-        foreach (var branch in selectedChangeset.Branches)
+        lstBranches.Items.Clear();
+
+        lblStatus.Text = $"Loading branches for changeset {_selectedChangesetId}...";
+
+        var selectedChangeset = lstChangesets.SelectedItems.Count > 0
+            ? lstChangesets.SelectedItems[0].Tag as global::AutoMerge.ChangesetViewModel
+            : null;
+
+        if (selectedChangeset != null)
         {
-          var item = new ListViewItem(branch) { Checked = true };
-          lstBranches.Items.Add(item);
+          var workspaces = _versionControl.QueryWorkspaces(null, _tfs.AuthorizedIdentity.UniqueName, Environment.MachineName);
+          var workspace = workspaces.Length == 0
+              ? null
+              : global::AutoMerge.WorkspaceHelper.GetWorkspace(_versionControl, workspaces);
+
+          if (workspace != null)
+          {
+            var branches = await Task.Run(() =>
+                global::AutoMerge.BranchesViewModel.GetBranches(
+                    _tfs,
+                    selectedChangeset,
+                    workspace,
+                    _changesetService,
+                    null));
+
+            foreach (var branch in branches)
+            {
+              var branchText = branch.DisplayBranchName;
+              var type = "Target";
+              if (branch.IsSourceBranch)
+              {
+                branchText += " (source)";
+                type = "Source";
+              }
+
+              var item = new ListViewItem(branchText) { Checked = !branch.IsSourceBranch && branch.Checked };
+              item.SubItems.Add(type);
+              item.SubItems.Add(branch.ValidationMessage ?? string.Empty);
+              item.Tag = branch;
+              lstBranches.Items.Add(item);
+            }
+          }
+          else
+          {
+            lblStatus.Text = "No workspace found";
+          }
+        }
+
+        UpdateMergeButton();
+
+        if (lblStatus.Text != "No workspace found")
+        {
+          lblStatus.Text = "Ready";
         }
       }
-
-      UpdateMergeButton();
-
-      lblStatus.Text = "Ready";
+      catch (Exception ex)
+      {
+        lblStatus.Text = "Error loading branches";
+        MessageBox.Show($"Failed to load branches:\n\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
     }
 
     private string TruncateComment(string comment)

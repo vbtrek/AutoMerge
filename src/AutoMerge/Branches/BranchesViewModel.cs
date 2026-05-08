@@ -305,7 +305,7 @@ namespace AutoMerge
       {
         Logger.Info("Getting branches for changeset {0} ...",
             changeset.ChangesetId.ToString(CultureInfo.InvariantCulture));
-        var branches = await Task.Run(() => GetBranches(Context, changeset));
+        var branches = await Task.Run(() => GetBranches(Context?.TeamProjectCollection, changeset, _workspace, _changesetService, _eventAggregator));
         Logger.Info("Getting branches end for changeset {0}",
             changeset.ChangesetId.ToString(CultureInfo.InvariantCulture));
 
@@ -341,18 +341,20 @@ namespace AutoMerge
       Refresh();
     }
 
-    private ObservableCollection<MergeInfoViewModel> GetBranches(ITeamFoundationContext context, ChangesetViewModel changesetViewModel)
+    public static ObservableCollection<MergeInfoViewModel> GetBranches(
+        TfsTeamProjectCollection tfs,
+        ChangesetViewModel changesetViewModel,
+        Workspace workspace,
+        ChangesetService changesetService,
+        IEventAggregator eventAggregator)
     {
-      if (context == null || context.TeamProjectCollection == null)
+      if (tfs == null || changesetViewModel == null || changesetService == null || workspace == null)
         return new ObservableCollection<MergeInfoViewModel>();
-      var tfs = context.TeamProjectCollection;
+
       var versionControl = tfs.GetService<VersionControlServer>();
 
       var result = new ObservableCollection<MergeInfoViewModel>();
-
-      var workspace = _workspace;
-
-      var changesetService = _changesetService;
+      var aggregator = eventAggregator ?? new EventAggregator();
 
       var changes = changesetService.GetChanges(changesetViewModel.ChangesetId);
 
@@ -375,7 +377,7 @@ namespace AutoMerge
         var branchValidator = new BranchValidator(workspace, trackMerges);
         var branchFactory = new BranchFactory(sourceBranch, sourceTopFolder,
             changesetVersionSpec, branchValidator,
-            _eventAggregator);
+            aggregator);
 
         var sourceBranchInfo = versionControl.QueryBranchObjects(sourceBranchIdentifier, RecursionType.None)[0];
         if (sourceBranchInfo.Properties != null && sourceBranchInfo.Properties.ParentBranch != null
