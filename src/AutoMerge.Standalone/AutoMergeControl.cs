@@ -112,7 +112,7 @@ namespace AutoMerge.Standalone
                     selectedChangeset,
                     workspace,
                     _changesetService,
-                    null));
+                    new global::AutoMerge.Prism.Events.EventAggregator()));
 
             foreach (var branch in branches)
             {
@@ -133,19 +133,20 @@ namespace AutoMerge.Standalone
           }
           else
           {
-            lblStatus.Text = "No workspace found";
+            lblStatus.Text = "No workspace found. Create/map a TFVC workspace and refresh.";
           }
         }
 
         UpdateMergeButton();
 
-        if (lblStatus.Text != "No workspace found")
+        if (lblStatus.Text != "No workspace found. Create/map a TFVC workspace and refresh.")
         {
           lblStatus.Text = "Ready";
         }
       }
       catch (Exception ex)
       {
+        System.Diagnostics.Debug.WriteLine(ex);
         lblStatus.Text = "Error loading branches";
         MessageBox.Show($"Failed to load branches:\n\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
