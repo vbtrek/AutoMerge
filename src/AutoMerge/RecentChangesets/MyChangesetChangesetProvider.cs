@@ -40,19 +40,24 @@ namespace AutoMerge
         {
           var projectName = GetProjectName();
 
-          // TODO_DS1 Worth doubling _maxChangesetCount here
-
-          var tfsChangesets = changesetService.GetUserChangesets(projectName, userLogin, _maxChangesetCount);
-
           if (_filterOutMergeChangesets)
-            changesets = changesets
-              .Where(cs => !cs.Comment.StartsWith("MERGE") || cs.Branches.Count > 1)
+          {
+            var tfsChangesets = changesetService.GetUserChangesets(projectName, userLogin, _maxChangesetCount * 2);
+
+            changesets = tfsChangesets
+              .Select(tfsChangeset => ToChangesetViewModel(tfsChangeset, changesetService))
+              .Where(cs => !cs.Comment.StartsWith("MERGE") && cs.Branches.Count == 1)
               .Take(_maxChangesetCount)
               .ToList();
+          }
           else
+          {
+            var tfsChangesets = changesetService.GetUserChangesets(projectName, userLogin, _maxChangesetCount);
+
             changesets = tfsChangesets
               .Select(tfsChangeset => ToChangesetViewModel(tfsChangeset, changesetService))
               .ToList();
+          }
         }
       }
 
