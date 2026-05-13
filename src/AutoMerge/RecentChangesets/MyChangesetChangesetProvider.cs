@@ -8,6 +8,8 @@ namespace AutoMerge
   {
     private readonly int _maxChangesetCount;
 
+    private readonly bool _filterOutMergeChangesets;
+
     public MyChangesetChangesetProvider(IServiceProvider serviceProvider, int maxChangesetCount)
       : base(serviceProvider)
     {
@@ -18,6 +20,12 @@ namespace AutoMerge
       : base(changesetService, teamProjectName)
     {
       _maxChangesetCount = maxChangesetCount;
+    }
+
+    public MyChangesetChangesetProvider(ChangesetService changesetService, string teamProjectName, int maxChangesetCount, bool filterOutMergeChangesets)
+      : this(changesetService, teamProjectName, maxChangesetCount)
+    {
+      _filterOutMergeChangesets = filterOutMergeChangesets;
     }
 
     protected override List<ChangesetViewModel> GetChangesetsInternal(string userLogin)
@@ -36,19 +44,15 @@ namespace AutoMerge
 
           var tfsChangesets = changesetService.GetUserChangesets(projectName, userLogin, _maxChangesetCount);
 
-          ///*
-          changesets = tfsChangesets
-            .Select(tfsChangeset => ToChangesetViewModel(tfsChangeset, changesetService))
-            .ToList();
-          //*/
-
-          // TODO_DS1 Eliminate MERGE changesets, as they are not relevant for AutoMerge
-          ///*
-          changesets = changesets
-            .Where(cs => !cs.Comment.StartsWith("MERGE") || cs.Branches.Count > 1)
-            .Take(_maxChangesetCount)
-            .ToList();
-          //*/
+          if (_filterOutMergeChangesets)
+            changesets = changesets
+              .Where(cs => !cs.Comment.StartsWith("MERGE") || cs.Branches.Count > 1)
+              .Take(_maxChangesetCount)
+              .ToList();
+          else
+            changesets = tfsChangesets
+              .Select(tfsChangeset => ToChangesetViewModel(tfsChangeset, changesetService))
+              .ToList();
         }
       }
 

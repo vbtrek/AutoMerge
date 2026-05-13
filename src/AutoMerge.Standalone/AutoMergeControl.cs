@@ -62,7 +62,8 @@ namespace AutoMerge.Standalone
       var changesetProvider = new global::AutoMerge.MyChangesetChangesetProvider(
           _changesetService,
           DefaultTeamProjectName,
-          global::AutoMerge.Settings.Instance.ChangesetCount);
+          global::AutoMerge.Settings.Instance.ChangesetCount,
+          true);
 
       _changesets = await changesetProvider.GetChangesets(_versionControl.AuthorizedUser);
 
