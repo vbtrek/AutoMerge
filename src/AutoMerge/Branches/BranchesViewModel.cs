@@ -427,7 +427,7 @@ namespace AutoMerge
               mergesRelationships.Select(r => r.Version).Cast<ChangesetVersionSpec>().Select(c => c.ChangesetId)
               .Distinct()
               .ToArray();
-          var branches = _changesetService.GetAssociatedBranches(changetIds);
+          var branches = changesetService.GetAssociatedBranches(changetIds);
 
           foreach (var mergesRelationship in mergesRelationships)
           {

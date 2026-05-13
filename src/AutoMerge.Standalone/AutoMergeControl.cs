@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.VersionControl.Client;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 namespace AutoMerge.Standalone
 {
@@ -31,8 +32,14 @@ namespace AutoMerge.Standalone
       _tfs = serviceProvider.TfsConnection;
       _versionControl = _tfs.GetService<VersionControlServer>();
       _changesetService = new global::AutoMerge.ChangesetService(_versionControl);
+      cmbMergeMode.SelectedIndex = 0;
 
       InitializeAsync();
+    }
+
+    public void ConnectedStatusMessage(string message)
+    {
+      toolStripStatusLabel1.Text = message;
     }
 
     private async Task InitializeAsync()
@@ -117,17 +124,29 @@ namespace AutoMerge.Standalone
             foreach (var branch in branches)
             {
               var branchText = branch.DisplayBranchName;
+
               var type = "Target";
+
               if (branch.IsSourceBranch)
               {
-                branchText += " (source)";
-                type = "Source";
+                continue; // TODO_DS1 Skip source branches for now, as they can't be merged to
+                //branchText += " (source)";
+                //type = "Source";
               }
 
               var item = new ListViewItem(branchText) { Checked = !branch.IsSourceBranch && branch.Checked };
+
               item.SubItems.Add(type);
+
               item.SubItems.Add(branch.ValidationMessage ?? string.Empty);
+
               item.Tag = branch;
+
+              if (branch.ValidationResult != BranchValidationResult.Success)
+              {
+                item.ForeColor = System.Drawing.Color.Gray;
+              }
+
               lstBranches.Items.Add(item);
             }
           }
@@ -181,6 +200,24 @@ namespace AutoMerge.Standalone
       UpdateMergeButton();
     }
 
+    private void lstBranches_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+    {
+      if (e.Item.Tag is MergeInfoViewModel branch)
+      {
+        if (branch.ValidationResult != BranchValidationResult.Success)
+          e.Item.Selected = false;
+      }
+    }
+
+    private void lstBranches_ItemCheck(object sender, ItemCheckEventArgs e)
+    {
+      if (lstBranches.Items[e.Index].Tag is MergeInfoViewModel branch)
+      {
+        if (branch.ValidationResult != BranchValidationResult.Success)
+          e.NewValue = e.CurrentValue;
+      }
+    }
+
     private void UpdateMergeButton()
     {
       btnMerge.Enabled = lstBranches.CheckedItems.Count > 0;
@@ -193,7 +230,7 @@ namespace AutoMerge.Standalone
         btnMerge.Enabled = false;
         lblStatus.Text = "Merging...";
 
-        // Placeholder for merge operation
+        // TODO_DS1 Placeholder for merge operation
         await Task.Delay(1000);
 
         lblStatus.Text = "Merge completed";
@@ -258,6 +295,5 @@ namespace AutoMerge.Standalone
         MessageBox.Show($"Failed to load changeset:\n\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
-
   }
 }

@@ -6,7 +6,7 @@ namespace AutoMerge.Standalone
   public partial class MainForm : Form
   {
     private StandaloneServiceProvider _serviceProvider;
-    private AutoMergeControl _autoMergeControl;
+    //TODO_DS1 private AutoMergeControl _autoMergeControl;
 
     public MainForm()
     {
@@ -18,24 +18,27 @@ namespace AutoMerge.Standalone
       try
       {
         btnConnect.Enabled = false;
-        toolStripStatusLabel1.Text = "Connecting...";
+        autoMergeControl1.ConnectedStatusMessage("Connecting...");
+        //TODO_DS1 toolStripStatusLabel1.Text = "Connecting...";
         Application.DoEvents();
 
         // Create service provider with TFS connection
         _serviceProvider = new StandaloneServiceProvider(txtTfsUrl.Text);
 
-        // Create the AutoMerge WinForms control
-        _autoMergeControl = new AutoMergeControl();
-        _autoMergeControl.Dock = DockStyle.Fill;
+        //// TODO_DS1 Create the AutoMerge WinForms control
+        //_autoMergeControl = new AutoMergeControl();
+        //_autoMergeControl.Dock = DockStyle.Fill;
 
-        // Add it to the panel
-        panelContent.Controls.Clear();
-        panelContent.Controls.Add(_autoMergeControl);
+        //// TODO_DS1 Add it to the panel
+        //panelContent.Controls.Clear();
+        //panelContent.Controls.Add(_autoMergeControl);
 
         // Initialize the control
-        _autoMergeControl.Initialize(_serviceProvider);
+        autoMergeControl1.Initialize(_serviceProvider);
 
-        toolStripStatusLabel1.Text = $"Connected to {txtTfsUrl.Text}";
+        autoMergeControl1.ConnectedStatusMessage($"Connected to {txtTfsUrl.Text}");
+
+        //TODO_DS1 toolStripStatusLabel1.Text = $"Connected to {txtTfsUrl.Text}";
         txtTfsUrl.Enabled = false;
       }
       catch (Exception ex)
@@ -46,9 +49,16 @@ namespace AutoMerge.Standalone
             MessageBoxButtons.OK,
             MessageBoxIcon.Error);
 
-        toolStripStatusLabel1.Text = "Connection failed";
+        autoMergeControl1.ConnectedStatusMessage("Connection failed");
+        //TODO_DS1 toolStripStatusLabel1.Text = "Connection failed";
         btnConnect.Enabled = true;
       }
+    }
+
+    // TODO_DS1 Change this to be an auto connect, no need for the button and txtbox
+    private void MainForm_Load(object sender, EventArgs e)
+    {
+      btnConnect_Click(null, EventArgs.Empty);
     }
   }
 }

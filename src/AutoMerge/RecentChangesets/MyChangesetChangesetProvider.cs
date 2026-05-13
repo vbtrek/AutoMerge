@@ -32,11 +32,23 @@ namespace AutoMerge
         {
           var projectName = GetProjectName();
 
+          // TODO_DS1 Worth doubling _maxChangesetCount here
+
           var tfsChangesets = changesetService.GetUserChangesets(projectName, userLogin, _maxChangesetCount);
 
+          ///*
           changesets = tfsChangesets
             .Select(tfsChangeset => ToChangesetViewModel(tfsChangeset, changesetService))
             .ToList();
+          //*/
+
+          // TODO_DS1 Eliminate MERGE changesets, as they are not relevant for AutoMerge
+          ///*
+          changesets = changesets
+            .Where(cs => !cs.Comment.StartsWith("MERGE") || cs.Branches.Count > 1)
+            .Take(_maxChangesetCount)
+            .ToList();
+          //*/
         }
       }
 
