@@ -17,6 +17,15 @@ namespace AutoMerge
 			_changesetIds = changesetIds;
 		}
 
+		public ChangesetByIdChangesetProvider(ChangesetService changesetService, IEnumerable<int> changesetIds)
+			: base(changesetService, null)
+		{
+			if (changesetIds == null)
+				throw new ArgumentNullException("changesetIds");
+
+			_changesetIds = changesetIds;
+		}
+
 		protected override List<ChangesetViewModel> GetChangesetsInternal(string userLogin)
 		{
 			var changesets = new List<ChangesetViewModel>();

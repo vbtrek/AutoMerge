@@ -1,16 +1,89 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11723.231
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMerge", "AutoMerge\AutoMerge.csproj", "{726ED85E-2274-4D95-B822-B2CFE2CE44B9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{5101B5A3-BBBF-474C-8BBF-A61EF46643D0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "15.0", "15.0", "{6C80EF52-0D76-4F42-A66C-B18B1477A8CE}"
 	ProjectSection(SolutionItems) = preProject
-		..\build.fsx = ..\build.fsx
+		..\lib\15.0\Microsoft.TeamFoundation.Client.dll = ..\lib\15.0\Microsoft.TeamFoundation.Client.dll
+		..\lib\15.0\Microsoft.TeamFoundation.Common.dll = ..\lib\15.0\Microsoft.TeamFoundation.Common.dll
+		..\lib\15.0\Microsoft.TeamFoundation.Controls.dll = ..\lib\15.0\Microsoft.TeamFoundation.Controls.dll
+		..\lib\15.0\Microsoft.TeamFoundation.VersionControl.Client.dll = ..\lib\15.0\Microsoft.TeamFoundation.VersionControl.Client.dll
+		..\lib\15.0\Microsoft.TeamFoundation.VersionControl.Common.dll = ..\lib\15.0\Microsoft.TeamFoundation.VersionControl.Common.dll
+		..\lib\15.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll = ..\lib\15.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMerge.Tests", "AutoMerge.Tests\AutoMerge.Tests.csproj", "{4CD4D5BB-FE08-4DAF-A952-93E78022FC12}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "16.0", "16.0", "{067032CB-986B-4AD8-A3E1-5AE11C544A47}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\16.0\Microsoft.TeamFoundation.Client.dll = ..\lib\16.0\Microsoft.TeamFoundation.Client.dll
+		..\lib\16.0\Microsoft.TeamFoundation.Common.dll = ..\lib\16.0\Microsoft.TeamFoundation.Common.dll
+		..\lib\16.0\Microsoft.TeamFoundation.Controls.dll = ..\lib\16.0\Microsoft.TeamFoundation.Controls.dll
+		..\lib\16.0\Microsoft.TeamFoundation.VersionControl.Client.dll = ..\lib\16.0\Microsoft.TeamFoundation.VersionControl.Client.dll
+		..\lib\16.0\Microsoft.TeamFoundation.VersionControl.Common.dll = ..\lib\16.0\Microsoft.TeamFoundation.VersionControl.Common.dll
+		..\lib\16.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll = ..\lib\16.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "17.0", "17.0", "{5DC7FDC7-5BF6-4C05-A817-72C9C8546090}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\17.0\Microsoft.TeamFoundation.Client.dll = ..\lib\17.0\Microsoft.TeamFoundation.Client.dll
+		..\lib\17.0\Microsoft.TeamFoundation.Common.dll = ..\lib\17.0\Microsoft.TeamFoundation.Common.dll
+		..\lib\17.0\Microsoft.TeamFoundation.Controls.dll = ..\lib\17.0\Microsoft.TeamFoundation.Controls.dll
+		..\lib\17.0\Microsoft.TeamFoundation.VersionControl.Client.dll = ..\lib\17.0\Microsoft.TeamFoundation.VersionControl.Client.dll
+		..\lib\17.0\Microsoft.TeamFoundation.VersionControl.Common.dll = ..\lib\17.0\Microsoft.TeamFoundation.VersionControl.Common.dll
+		..\lib\17.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll = ..\lib\17.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "18.0", "18.0", "{2286A832-B2F8-45AE-933A-0A855E5AD542}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\18.0\Microsoft.TeamFoundation.Client.dll = ..\lib\18.0\Microsoft.TeamFoundation.Client.dll
+		..\lib\18.0\Microsoft.TeamFoundation.Common.dll = ..\lib\18.0\Microsoft.TeamFoundation.Common.dll
+		..\lib\18.0\Microsoft.TeamFoundation.Controls.dll = ..\lib\18.0\Microsoft.TeamFoundation.Controls.dll
+		..\lib\18.0\Microsoft.TeamFoundation.Core.WebApi.dll = ..\lib\18.0\Microsoft.TeamFoundation.Core.WebApi.dll
+		..\lib\18.0\Microsoft.TeamFoundation.VersionControl.Client.dll = ..\lib\18.0\Microsoft.TeamFoundation.VersionControl.Client.dll
+		..\lib\18.0\Microsoft.TeamFoundation.VersionControl.Common.dll = ..\lib\18.0\Microsoft.TeamFoundation.VersionControl.Common.dll
+		..\lib\18.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll = ..\lib\18.0\Microsoft.TeamFoundation.WorkItemTracking.Client.dll
+		..\lib\18.0\Microsoft.VisualStudio.Services.Client.Interactive.dll = ..\lib\18.0\Microsoft.VisualStudio.Services.Client.Interactive.dll
+		..\lib\18.0\Microsoft.VisualStudio.Services.Common.dll = ..\lib\18.0\Microsoft.VisualStudio.Services.Common.dll
+		..\lib\18.0\Microsoft.VisualStudio.Services.WebApi.dll = ..\lib\18.0\Microsoft.VisualStudio.Services.WebApi.dll
+		..\lib\18.0\Newtonsoft.Json.dll = ..\lib\18.0\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FE189FF-6AED-444C-B5DE-9F841281B0F9}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\azure-pipelines.yml = ..\azure-pipelines.yml
+		..\build_v15.bat = ..\build_v15.bat
+		..\build_v16.bat = ..\build_v16.bat
+		..\build_v17.bat = ..\build_v17.bat
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\README.md = ..\README.md
+		..\RELEASE_NOTES.md = ..\RELEASE_NOTES.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{D5AD1EB1-1B80-450D-92E2-C6FECB556576}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\build.fsx = ..\build\build.fsx
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "screenshots", "screenshots", "{A2F06608-443F-4923-8E3B-3BC7E7E40A53}"
+	ProjectSection(SolutionItems) = preProject
+		..\screenshots\automerge_main.png = ..\screenshots\automerge_main.png
+		..\screenshots\automerge_teamexplorer.png = ..\screenshots\automerge_teamexplorer.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{49184F69-C2BE-4D0C-A9FF-0EEC2C428589}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{96B4F09B-685B-4CF3-9B02-FECE8807BE4C}"
+	ProjectSection(SolutionItems) = preProject
+		..\tools\NuGet\LICENSE.txt = ..\tools\NuGet\LICENSE.txt
+		..\tools\NuGet\NuGet.exe = ..\tools\NuGet\NuGet.exe
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMerge.Standalone", "AutoMerge.Standalone\AutoMerge.Standalone.csproj", "{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,11 +95,24 @@ Global
 		{726ED85E-2274-4D95-B822-B2CFE2CE44B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{726ED85E-2274-4D95-B822-B2CFE2CE44B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{726ED85E-2274-4D95-B822-B2CFE2CE44B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4CD4D5BB-FE08-4DAF-A952-93E78022FC12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4CD4D5BB-FE08-4DAF-A952-93E78022FC12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B9A3C2D-5F6E-4A1B-9C3D-2E4F5A6B7C8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {8FE189FF-6AED-444C-B5DE-9F841281B0F9}
+		{6C80EF52-0D76-4F42-A66C-B18B1477A8CE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{067032CB-986B-4AD8-A3E1-5AE11C544A47} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{5DC7FDC7-5BF6-4C05-A817-72C9C8546090} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{2286A832-B2F8-45AE-933A-0A855E5AD542} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D5AD1EB1-1B80-450D-92E2-C6FECB556576} = {8FE189FF-6AED-444C-B5DE-9F841281B0F9}
+		{A2F06608-443F-4923-8E3B-3BC7E7E40A53} = {8FE189FF-6AED-444C-B5DE-9F841281B0F9}
+		{49184F69-C2BE-4D0C-A9FF-0EEC2C428589} = {8FE189FF-6AED-444C-B5DE-9F841281B0F9}
+		{96B4F09B-685B-4CF3-9B02-FECE8807BE4C} = {49184F69-C2BE-4D0C-A9FF-0EEC2C428589}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D74AF8A3-6127-40F7-B6C1-E948F866D814}

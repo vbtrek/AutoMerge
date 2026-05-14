@@ -37,7 +37,7 @@
           specify the "language" attribute for the Strings tag. It is possible however to specify
           different String sections inside any element definition, one for each supported language.
           -->
-                  <ButtonText>Auto Merge</ButtonText>
+                  <ButtonText>GenetiQ Auto Merge</ButtonText>
               </Strings>
           </Menu>
       </Menus>
@@ -45,6 +45,9 @@
     <Groups>
       <Group guid="guidShowAutoMergeCmdSet" id="AutoMergeGroup" priority="0x100">
         <Parent guid="guidShowAutoMergeCmdSet" id="AutoMergeToolbar"/>
+      </Group>
+      <Group guid="guidShowAutoMergeCmdSet" id="AutoMergeToolsMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
       </Group>
     </Groups>
 
@@ -57,14 +60,49 @@
         <CommandFlag>IconIsMoniker</CommandFlag>
         <Strings>
           <LocCanonicalName>AutoMerge.Show</LocCanonicalName>
-          <ButtonText>Show Auto Merge</ButtonText>
+          <ButtonText>GenetiQ Auto Merge</ButtonText>
         </Strings>
       </Button>
     </Buttons>
 
   </Commands>
 
+  <CommandPlacements>
+    <!-- Place command in Tools menu -->
+    <CommandPlacement guid="guidShowAutoMergeCmdSet" id="ShowAutoMergeCommandId" priority="0x0100">
+      <Parent guid="guidShowAutoMergeCmdSet" id="AutoMergeToolsMenuGroup"/>
+    </CommandPlacement>
 
+    <!-- OPTIONAL: Uncomment any of these to add the command to other locations -->
+
+    <!-- Add to View > Other Windows menu (common for tool windows) -->
+    <!--
+    <CommandPlacement guid="guidShowAutoMergeCmdSet" id="ShowAutoMergeCommandId" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+    </CommandPlacement>
+    -->
+
+    <!-- Add to standard toolbar (top toolbar with Build/Debug buttons) -->
+    <!--
+    <CommandPlacement guid="guidShowAutoMergeCmdSet" id="ShowAutoMergeCommandId" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_TOOLBAR_STANDARD"/>
+    </CommandPlacement>
+    -->
+
+    <!-- Add to Extensions menu -->
+    <!--
+    <CommandPlacement guid="guidShowAutoMergeCmdSet" id="ShowAutoMergeCommandId" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_EXTENSIONS"/>
+    </CommandPlacement>
+    -->
+
+    <!-- Add to Tools > Other menu items group -->
+    <!--
+    <CommandPlacement guid="guidShowAutoMergeCmdSet" id="ShowAutoMergeCommandId" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDG_VS_TOOLS_OTHER2"/>
+    </CommandPlacement>
+    -->
+  </CommandPlacements>
 
   <!--<KeyBindings>
     <KeyBinding guid="guidShowAutoMergeCmdSet" id="ShowAutoMergeCommandId" editor="guidVSStd97" key1="K" mod1="Control" key2="0" mod2="Control" />
@@ -77,6 +115,7 @@
       <IDSymbol name="AutoMergeGroup" value="0x1050" />
       <IDSymbol name="AutoMergeToolbar" value="0x1030" />
       <IDSymbol name="ShowAutoMergeCommandId" value="0x0100" />
+      <IDSymbol name="AutoMergeToolsMenuGroup" value="0x1060" />
     </GuidSymbol>
     <GuidSymbol name="AutoMergeIcons" value="{2407B4E8-3623-408A-B4F3-CABFFE725D70}">
       <IDSymbol name="Show" value="1" />

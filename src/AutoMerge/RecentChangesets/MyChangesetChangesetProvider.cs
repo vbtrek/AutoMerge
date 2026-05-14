@@ -1,38 +1,67 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace AutoMerge
 {
-	public class MyChangesetChangesetProvider : ChangesetProviderBase
-	{
-	    private readonly int _maxChangesetCount;
+  public class MyChangesetChangesetProvider : ChangesetProviderBase
+  {
+    private readonly int _maxChangesetCount;
 
-		public MyChangesetChangesetProvider(IServiceProvider serviceProvider, int maxChangesetCount)
-			: base(serviceProvider)
-		{
-		    _maxChangesetCount = maxChangesetCount;
-		}
+    private readonly bool _filterOutMergeChangesets;
 
-	    protected override List<ChangesetViewModel> GetChangesetsInternal(string userLogin)
-		{
-			var changesets = new List<ChangesetViewModel>();
+    public MyChangesetChangesetProvider(IServiceProvider serviceProvider, int maxChangesetCount)
+      : base(serviceProvider)
+    {
+      _maxChangesetCount = maxChangesetCount;
+    }
 
-			if (!string.IsNullOrEmpty(userLogin))
-			{
-				var changesetService = GetChangesetService();
+    public MyChangesetChangesetProvider(ChangesetService changesetService, string teamProjectName, int maxChangesetCount)
+      : base(changesetService, teamProjectName)
+    {
+      _maxChangesetCount = maxChangesetCount;
+    }
 
-				if (changesetService != null)
-				{
-				    var projectName = GetProjectName();
-					var tfsChangesets = changesetService.GetUserChangesets(projectName, userLogin, _maxChangesetCount);
-					changesets = tfsChangesets
-						.Select(tfsChangeset => ToChangesetViewModel(tfsChangeset, changesetService))
-						.ToList();
-				}
-			}
+    public MyChangesetChangesetProvider(ChangesetService changesetService, string teamProjectName, int maxChangesetCount, bool filterOutMergeChangesets)
+      : this(changesetService, teamProjectName, maxChangesetCount)
+    {
+      _filterOutMergeChangesets = filterOutMergeChangesets;
+    }
 
-			return changesets;
-		}
-	}
+    protected override List<ChangesetViewModel> GetChangesetsInternal(string userLogin)
+    {
+      var changesets = new List<ChangesetViewModel>();
+
+      if (!string.IsNullOrEmpty(userLogin))
+      {
+        var changesetService = GetChangesetService();
+
+        if (changesetService != null)
+        {
+          var projectName = GetProjectName();
+
+          if (_filterOutMergeChangesets)
+          {
+            var tfsChangesets = changesetService.GetUserChangesets(projectName, userLogin, _maxChangesetCount * 2);
+
+            changesets = tfsChangesets
+              .Select(tfsChangeset => ToChangesetViewModel(tfsChangeset, changesetService))
+              .Where(cs => !cs.Comment.StartsWith("MERGE") && cs.Branches.Count == 1)
+              .Take(_maxChangesetCount)
+              .ToList();
+          }
+          else
+          {
+            var tfsChangesets = changesetService.GetUserChangesets(projectName, userLogin, _maxChangesetCount);
+
+            changesets = tfsChangesets
+              .Select(tfsChangeset => ToChangesetViewModel(tfsChangeset, changesetService))
+              .ToList();
+          }
+        }
+      }
+
+      return changesets;
+    }
+  }
 }
